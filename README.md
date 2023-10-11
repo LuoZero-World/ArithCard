@@ -28,7 +28,7 @@ Netty+JavaFX，暂无springboot，估计再迭代几个版本就有了
 
 还有勉勉强强的卡牌UI，在`src/main/img`路径下就可以看到
 
-### 上手指南
+### 部署
 
 **服务端**
 
@@ -51,4 +51,6 @@ Netty+JavaFX，暂无springboot，估计再迭代几个版本就有了
 <img width="449" alt="1697032220669" src="https://github.com/LuoZero-World/ArithCard/assets/99077678/84e77a99-8193-4968-a871-4c48893934bf"/>
 
 
+### 联系
+QQ：1276602269
 
