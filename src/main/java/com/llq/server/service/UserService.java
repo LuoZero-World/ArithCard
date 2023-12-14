@@ -24,7 +24,7 @@ public enum UserService {
         allUserMap.put("Pi", new User("Pi"));
         allUserMap.put("Admin", new User("Admin"));
     }
-    {
+    {       //账户信息      用户名：密码
         userPwdMap.put("Jack", "123");
         userPwdMap.put("Tom", "123");
         userPwdMap.put("Lili", "123");
