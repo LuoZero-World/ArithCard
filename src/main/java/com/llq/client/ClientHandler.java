@@ -22,18 +22,10 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         Message message = (Message) msg;
 
-        //int num = CommunicationService.PROMISES.getOrDefault(message.getReqMessageType(), 0);
-        //if(message instanceof GamingMessage){
-            //CommunicationService.PROMISES.put(message.getMessageType(), num-1);
-//            if(message instanceof ChallengeLeaveMsg){
-//                //挑战者离开，重置监听
-//                CommunicationService.PROMISES.put(MessageType.JoinTabReqMsg, 1);
-//            }
-            //新起一个线程去执行操作
-            new Thread(()->{
-                MessageService.INSTANCE.execMessage(message);
-                ReferenceCountUtil.release(msg);
-            }).start();
-        //}
+        //新起一个线程去执行操作
+        new Thread(()->{
+            MessageService.INSTANCE.execMessage(message);
+            ReferenceCountUtil.release(msg);
+        }).start();
     }
 }

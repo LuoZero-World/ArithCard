@@ -15,22 +15,6 @@ public enum CommunicationService {
     }
 
     public void sendMessage(Message request){
-        //PROMISES.put(request.getMessageType(), PROMISES.getOrDefault(request.getMessageType(), 0)+1);
-
-        //监听对手的事件
-//        if(request instanceof CreateTabReqMsg){
-//            PROMISES.put(MessageType.JoinTabReqMsg, 1);
-//        }
-//
-//        if(request instanceof LeaveTabReqMsg){
-//            PROMISES.put(MessageType.JoinTabReqMsg, 0);
-//            PROMISES.put(MessageType.GameStartReqMsg, 1);
-//        }
-//
-//        //挑战者加入，监听桌主事件
-//        if(request instanceof JoinTabReqMsg){
-//            PROMISES.put(MessageType.GameStartReqMsg, 1);
-//        }
 
         channel.writeAndFlush(request);
     }
