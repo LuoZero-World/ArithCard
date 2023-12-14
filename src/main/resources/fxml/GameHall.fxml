@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.leewyatt.rxcontrols.controls.RXTranslationButton?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane prefHeight="335.0" prefWidth="600.0" stylesheets="@../css/hall.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.llq.ui.controller.HallController">
+   <children>
+      <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab closable="false" text="游戏大厅">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ListView id="tablelist" fx:id="tableList" layoutY="28.0" prefHeight="371.0" prefWidth="600.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="28.0" />
+                              <Label alignment="CENTER" layoutX="269.0" layoutY="8.0" onMousePressed="#OnFlush" prefHeight="24.0" prefWidth="91.0" text="对局情况" AnchorPane.leftAnchor="255.0" AnchorPane.rightAnchor="255.0" AnchorPane.topAnchor="3.0">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView fx:id="flushView" fitHeight="25.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../img/加载刷新.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Label>
+                              <RXTranslationButton layoutX="327.0" layoutY="2.0" onMousePressed="#OnLogout" prefHeight="26.0" prefWidth="90.0" styleClass="logoutBtn" text="退出游戏" textFill="WHITE" translationDir="LEFT_TO_RIGHT" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="2.0">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView fitHeight="23.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../img/退出.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </RXTranslationButton>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab closable="false" text="创建牌桌">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <HBox alignment="CENTER" layoutX="54.0" layoutY="63.0" prefHeight="24.0" prefWidth="290.0" spacing="2.0" AnchorPane.leftAnchor="155.0" AnchorPane.rightAnchor="155.0">
+                                 <children>
+                                    <Label alignment="CENTER_RIGHT" prefHeight="19.0" prefWidth="101.0" text="牌桌名称：">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="tabNameTxt" prefHeight="23.0" prefWidth="143.0" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" layoutX="54.0" layoutY="100.0" prefHeight="24.0" prefWidth="403.0" AnchorPane.leftAnchor="155.0" AnchorPane.rightAnchor="155.0">
+                                 <children>
+                                    <Label alignment="CENTER_RIGHT" prefHeight="19.0" prefWidth="103.0" text="最大观战人数：">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="tabMaxTxt" prefHeight="23.0" prefWidth="143.0" />
+                                 </children>
+                              </HBox>
+                              <Button layoutX="249.0" layoutY="153.0" mnemonicParsing="false" onMousePressed="#OnCreate" prefHeight="31.0" prefWidth="101.0" text="创建牌桌" AnchorPane.leftAnchor="249.0" AnchorPane.rightAnchor="249.66666666666669">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Button>
+                              <Label fx:id="errLabel2" layoutX="439.0" layoutY="104.0" prefHeight="15.0" prefWidth="105.0" text="输入错误" textFill="RED" visible="false" AnchorPane.rightAnchor="58.0" />
+                              <Label fx:id="errLabel1" layoutX="437.0" layoutY="67.0" prefHeight="15.0" prefWidth="129.0" text="已存在对局" textFill="RED" visible="false" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                  <Tab text="寻找对局">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <HBox alignment="CENTER" layoutX="14.0" layoutY="37.0" prefHeight="24.0" prefWidth="260.0" spacing="8.0" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.0">
+                                 <children>
+                                    <Label alignment="CENTER_RIGHT" prefHeight="26.0" prefWidth="101.0" text="牌桌名称：">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="tabNameTxt2" prefHeight="23.0" prefWidth="143.0" translateX="-5.0" />
+                                    <Button mnemonicParsing="false" onMouseClicked="#OnQuery" prefHeight="29.0" prefWidth="85.0" text="寻找牌桌">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <ListView id="tablelist2" fx:id="tableList2" layoutY="102.0" prefHeight="165.0" prefWidth="440.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0" />
+                              <Label alignment="CENTER" layoutX="80.0" layoutY="71.0" prefHeight="23.0" prefWidth="83.0" text="查询结果" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="80.0">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+            <Label id="tiplabel" fx:id="tipLabel" alignment="CENTER" prefHeight="31.0" prefWidth="159.0" text="未找到任何对局" textFill="#655d5d" visible="false" StackPane.alignment="CENTER">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </StackPane>
+      <ImageView fitHeight="27.0" fitWidth="30.0" onMousePressed="#OnClose" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="2.0">
+         <image>
+            <Image url="@../img/叉号.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
