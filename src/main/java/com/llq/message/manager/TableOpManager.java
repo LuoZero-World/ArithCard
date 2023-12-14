@@ -126,7 +126,7 @@ public enum TableOpManager {
         Stage battle = StageService.INSTANCE.getStageBy(UIUrl.Name.BattleView);
         getNodeById("#ancpane1", battle).setVisible(false);
         getNodeById("#3btnbox", battle).setVisible(false);
-        getNodeById("#6btnbox", battle).setVisible(false);
+        getNodeById("#5btnbox", battle).setVisible(false);
         getNodeById("#myattack", battle).setVisible(false);
         getNodeById("#mydefend", battle).setVisible(false);
         getNodeById("#challengeattack", battle).setVisible(false);

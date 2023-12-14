@@ -33,7 +33,7 @@ public class BattleController implements Controller {
     private HBox btnBox1, btnBox2, resBox;
 
     @FXML
-    private Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9;
+    private Button btn1, btn3, btn4, btn5, btn6, btn7, btn8, btn9;
 
     @FXML
     void OnLeave(MouseEvent event) {

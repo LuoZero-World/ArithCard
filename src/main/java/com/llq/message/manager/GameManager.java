@@ -35,7 +35,7 @@ public enum GameManager {
 
     private Button[] buttons = null;
     private Label fLabel = null, sLabel = null, opLabel = null, resLabel = null;
-    private HBox hbox3btn = null, hbox6btn = null;
+    private HBox hbox3btn = null, hbox5btn = null;
     private VBox infoBox = null;
 
     //TODO 有序
@@ -109,14 +109,14 @@ public enum GameManager {
         buttons = new Button[10];
         for(int i = 1; i <= 9; i++){
             Button btn = (Button) getNodeById("#btn"+i);
-            buttons[i] = btn;
+            if(btn != null) buttons[i] = btn;
         }
         fLabel = (Label) getNodeById("#firstlabel");
         sLabel = (Label) getNodeById("#secondlabel");
         opLabel = (Label) getNodeById("#oplabel");
         resLabel = (Label) getNodeById("#reslabel");
         hbox3btn = (HBox) getNodeById("#3btnbox");
-        hbox6btn = (HBox) getNodeById("#6btnbox");
+        hbox5btn = (HBox) getNodeById("#5btnbox");
         infoBox = (VBox) getNodeById("#infobox");
     }
 
@@ -158,7 +158,7 @@ public enum GameManager {
         Platform.runLater(()->{
             renderStage();
             //操作询问
-            hbox6btn.setVisible(true);
+            hbox5btn.setVisible(true);
             buttons[6].setVisible(false);
         });
     }
@@ -200,7 +200,7 @@ public enum GameManager {
         renderStage();
         getNodeById("#resbox").setVisible(false);
         hbox3btn.setVisible(false);
-        hbox6btn.setVisible(true);
+        hbox5btn.setVisible(true);
         fLabel.setText("");
         sLabel.setText("");
         opLabel.setText("");
@@ -253,7 +253,7 @@ public enum GameManager {
         //全局变量赋空
         NameForAll.clear();
         buttons = null;
-        hbox6btn = null;
+        hbox5btn = null;
         hbox3btn = null;
         fLabel = null;
         sLabel = null;
