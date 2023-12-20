@@ -23,7 +23,6 @@ public class RoundStartRespMsgHandler extends SimpleChannelInboundHandler<RoundS
         CardTable cardtable = CardTableService.INSTANCE.getTableBy(tableName);
 
         //给master玩家发送回合开始响应
-        System.out.println("给master发送回合开始通知");
         ctx.writeAndFlush(new RoundStartRespMsg(true, ""));
 
         ReferenceCountUtil.release(roundStartReqMsg);

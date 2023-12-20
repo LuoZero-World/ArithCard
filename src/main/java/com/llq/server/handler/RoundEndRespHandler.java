@@ -5,6 +5,7 @@ import com.llq.entity.PlayerInfo;
 import com.llq.message.req.RoundEndReqMsg;
 import com.llq.message.resp.RoundEndRespMsg;
 import com.llq.message.resp.RoundStartRespMsg;
+import com.llq.message.resp.StateChangeMsg;
 import com.llq.server.service.CardTableService;
 import com.llq.server.service.ChannelBaseService;
 import io.netty.channel.Channel;
@@ -34,6 +35,16 @@ public class RoundEndRespHandler extends SimpleChannelInboundHandler<RoundEndReq
         final PlayerInfo masterInfo = cardTable.getMaster().getPlayerInfo(), challengeInfo = cardTable.getChallenge().getPlayerInfo();
         boolean isGameOver = false;
 
+        Channel masterChannel = ChannelBaseService.INSTANCE.getChannel(masterInfo.getNickname());
+        Channel challengeChannel = ChannelBaseService.INSTANCE.getChannel(challengeInfo.getNickname());
+
+        //改变状态
+        if(roundEndReqMsg.isMaster()){
+            cardTable.getMaster().setPlayerInfo(playerInfo);
+        } else{
+            cardTable.getChallenge().setPlayerInfo(playerInfo);
+        }
+
         //当前一轮结束，判断这一轮结束后游戏是否结束
         if((cardTable.getIdx()&1) == 1){
             isGameOver = cardTable.roundEndBattle();
@@ -56,17 +67,19 @@ public class RoundEndRespHandler extends SimpleChannelInboundHandler<RoundEndReq
             //同步C-S信息
             //如果是master发来的回合结束，那么通知guest开始
             if(roundEndReqMsg.isMaster()){
-                cardTable.getMaster().setPlayerInfo(playerInfo);
-                Channel channel = ChannelBaseService.INSTANCE.getChannel(challengeInfo.getNickname());
-
-                System.out.println("给guest发送回合开始通知");
-                channel.writeAndFlush(new RoundStartRespMsg(true, ""));
+                challengeChannel.writeAndFlush(new RoundStartRespMsg(true, ""));
             } else {     //否则是guest发来的回合结束，然后通知master这一轮结束，让其开始下一轮
-                cardTable.getChallenge().setPlayerInfo(playerInfo);
-                Channel channel = ChannelBaseService.INSTANCE.getChannel(masterInfo.getNickname());
+                PlayerInfo newMasterInfo = cardTable.getMaster().getPlayerInfo(), newChallengeInfo = cardTable.getChallenge().getPlayerInfo();
 
-                System.out.println("给master发送回合结束通知");
-                channel.writeAndFlush(new RoundEndRespMsg(false));
+                //调整对战双方战斗消息
+                masterChannel.writeAndFlush(
+                        new StateChangeMsg(newMasterInfo.getHP(), newChallengeInfo.getHP(), newMasterInfo.isDefend(), newMasterInfo.isAttack(), newChallengeInfo.isDefend(), newChallengeInfo.isAttack())
+                );
+                challengeChannel.writeAndFlush(
+                        new StateChangeMsg(newChallengeInfo.getHP(), newMasterInfo.getHP(), newChallengeInfo.isDefend(), newChallengeInfo.isAttack(), newMasterInfo.isDefend(), newMasterInfo.isAttack())
+                );
+
+                masterChannel.writeAndFlush(new RoundEndRespMsg(false));
             }
         }
         ReferenceCountUtil.release(roundEndReqMsg);

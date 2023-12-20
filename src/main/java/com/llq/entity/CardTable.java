@@ -166,7 +166,7 @@ public class CardTable {
     public boolean roundEndBattle(){
         int msgIdx = 1;
         sendGamingMessage("\n===该轮结束 系统执行判定===", msgIdx++);
-
+        dm.round--;
         //固定伤害
         if (dm.round == 0) {
             dm.round = DamageMaker.Round;
@@ -190,8 +190,7 @@ public class CardTable {
         if (isPlayerDie(msgIdx)) return true;
 
         sendGamingMessage("无玩家阵亡", msgIdx++);
-        sendGamingMessage("距离下一轮攻击还有" + dm.round + "回合", msgIdx++);
-        dm.round--;
+        sendGamingMessage("距离下一周固定攻击还有" + dm.round + "回合", msgIdx++);
         return false;
     }
     //对玩家p 进行伤害为d的攻击

@@ -33,7 +33,7 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Label id="cbloodlabel2" alignment="CENTER_RIGHT" layoutX="126.0" layoutY="49.0" prefHeight="25.0" prefWidth="102.0" text="HP：8/8" AnchorPane.rightAnchor="330.0" AnchorPane.topAnchor="33.0">
+                  <Label id="cbloodlabel2" alignment="CENTER_RIGHT" layoutX="126.0" layoutY="49.0" prefHeight="25.0" prefWidth="102.0" text="HP：?/?" AnchorPane.rightAnchor="330.0" AnchorPane.topAnchor="33.0">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -153,7 +153,7 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <Label id="bloodlabel2" fx:id="bloodLabel2" layoutX="333.0" layoutY="191.0" prefHeight="25.0" prefWidth="102.0" text="HP：8/8" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="330.0">
+                  <Label id="bloodlabel2" fx:id="bloodLabel2" layoutX="333.0" layoutY="191.0" prefHeight="25.0" prefWidth="102.0" text="HP：?/?" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="330.0">
                      <font>
                         <Font size="15.0" />
                      </font>

@@ -44,6 +44,7 @@ public enum MessageType implements Serializable {
     ChallengeLeaveMsg(7_000, ChallengeLeaveMsg.class),
 
     GamingMsg(20_000, GamingMessage.class),
+    StateChangeMsg(20_100, StateChangeMsg.class),
 
     ;
 

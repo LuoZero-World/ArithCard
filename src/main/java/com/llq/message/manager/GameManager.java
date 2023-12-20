@@ -6,11 +6,13 @@ import com.llq.entity.PlayerInfo;
 import com.llq.message.req.RoundStartReqMsg;
 import com.llq.message.resp.GameStartRespMsg;
 import com.llq.message.resp.GetCardRespMsg;
+import com.llq.message.resp.StateChangeMsg;
 import com.llq.ui.StageService;
 import com.llq.ui.event.SelectDCardHandler;
 import com.llq.ui.event.SelectOpCardHandler;
 import com.llq.utility.ImgUrl;
 import com.llq.utility.NameForAll;
+import com.llq.utility.PropertiesUtil;
 import com.llq.utility.UIUrl;
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -33,6 +35,8 @@ import java.util.List;
 public enum GameManager {
     GAME_MANAGER;
 
+    private final int blood = PropertiesUtil.getInt("HP");
+    private final int bloodSegLength = 240/blood;
     private Button[] buttons = null;
     private Label fLabel = null, sLabel = null, opLabel = null, resLabel = null;
     private HBox hbox3btn = null, hbox5btn = null;
@@ -249,6 +253,24 @@ public enum GameManager {
             else getNodeById("#myattack").setVisible(true);
 
             renderStage();
+        });
+    }
+
+    //改变游戏中角色对战状态
+    public void changeState(StateChangeMsg msg){
+        PlayerInfo playerInfo = NameForAll.player.getPlayerInfo();;
+        playerInfo.setHP(msg.getBlood1());
+        playerInfo.setAttack(msg.isAttack1());
+        playerInfo.setDefend(msg.isDefend1());
+        Platform.runLater(()->{
+            ((Label) getNodeById("#bloodlabel1")).setPrefWidth(bloodSegLength*msg.getBlood1());
+            ((Label) getNodeById("#cbloodlabel1")).setPrefWidth(bloodSegLength*msg.getBlood2());
+            ((Label) getNodeById("#bloodlabel2")).setText("HP: "+msg.getBlood1()+"/"+blood);
+            ((Label) getNodeById("#cbloodlabel2")).setText("HP: "+msg.getBlood2()+"/"+blood);
+            getNodeById("#mydefend").setVisible(msg.isDefend1());
+            getNodeById("#myattack").setVisible(msg.isAttack1());
+            getNodeById("#challengedefend").setVisible(msg.isDefend2());
+            getNodeById("#challengeattack").setVisible(msg.isAttack2());
         });
     }
 

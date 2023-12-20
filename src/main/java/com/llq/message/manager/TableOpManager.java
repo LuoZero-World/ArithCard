@@ -10,6 +10,7 @@ import com.llq.message.resp.JoinTabRespMsg;
 import com.llq.message.resp.TableRespMsg;
 import com.llq.ui.StageService;
 import com.llq.utility.NameForAll;
+import com.llq.utility.PropertiesUtil;
 import com.llq.utility.UIUrl;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -123,6 +124,7 @@ public enum TableOpManager {
 
     //用于初始化(隐藏)battle界面的控件
     void initStage(){
+        int blood = PropertiesUtil.getInt("HP");
         Stage battle = StageService.INSTANCE.getStageBy(UIUrl.Name.BattleView);
         getNodeById("#ancpane1", battle).setVisible(false);
         getNodeById("#3btnbox", battle).setVisible(false);
@@ -133,6 +135,8 @@ public enum TableOpManager {
         getNodeById("#challengedefend", battle).setVisible(false);
         getNodeById("#leavebutton", battle).setVisible(false);
         getNodeById("#startbutton", battle).setVisible(false);
+        ((Label) getNodeById("#bloodlabel2", battle)).setText("HP: "+blood+"/"+blood);
+        ((Label) getNodeById("#cbloodlabel2", battle)).setText("HP: "+blood+"/"+blood);
         ((VBox)(getNodeById("#infobox", battle))).getChildren().clear();
         HBox cardBox = (HBox) getNodeById("#resbox", battle);
         cardBox.setVisible(false);
