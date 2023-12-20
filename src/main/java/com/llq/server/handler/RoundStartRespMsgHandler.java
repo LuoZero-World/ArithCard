@@ -12,7 +12,7 @@ import io.netty.util.ReferenceCountUtil;
 /**
  * @author 李林麒
  * @date 2023/1/29 18:13
- * @Description 回合开始响应处理
+ * @Description 回合开始响应处理 只由master发送回合开始请求
  */
 @ChannelHandler.Sharable
 public class RoundStartRespMsgHandler extends SimpleChannelInboundHandler<RoundStartReqMsg> {
@@ -21,11 +21,11 @@ public class RoundStartRespMsgHandler extends SimpleChannelInboundHandler<RoundS
     protected void channelRead0(ChannelHandlerContext ctx, RoundStartReqMsg roundStartReqMsg) throws Exception {
         String tableName = roundStartReqMsg.getTableName();
         CardTable cardtable = CardTableService.INSTANCE.getTableBy(tableName);
-        int idx = roundStartReqMsg.isMaster() ? 0 : 1;
-        //给当前玩家返回回合开始响应
-        if(CardTable.idxArr[cardtable.getIdx()] == idx){
-            ctx.writeAndFlush(new RoundStartRespMsg(true, ""));
-        }
+
+        //给master玩家发送回合开始响应
+        System.out.println("给master发送回合开始通知");
+        ctx.writeAndFlush(new RoundStartRespMsg(true, ""));
+
         ReferenceCountUtil.release(roundStartReqMsg);
     }
 }

@@ -26,7 +26,6 @@ public class RoundStartRespMsg extends AbstructRespMessage{
 
     @Override
     public void executeIt() {
-        System.out.println("回合开始");
         GameManager.GAME_MANAGER.moveCard();
     }
 }

@@ -85,7 +85,7 @@
                               <Font size="14.0" />
                            </font>
                         </Button>
-                        <Button id="btn8" fx:id="btn8" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" text="确认">
+                        <Button id="btn8" fx:id="btn8" mnemonicParsing="false" onMousePressed="#realOperation" prefHeight="30.0" prefWidth="90.0" text="确认">
                            <font>
                               <Font size="14.0" />
                            </font>

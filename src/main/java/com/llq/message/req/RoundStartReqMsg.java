@@ -15,7 +15,6 @@ import lombok.Data;
 public class RoundStartReqMsg extends Message {
 
     private String tableName;
-    private boolean master;
 
     @Override
     public MessageType getMessageType() {

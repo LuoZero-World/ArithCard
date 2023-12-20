@@ -78,11 +78,20 @@ public class BattleController implements Controller {
 
     @FXML
     void OnOperation() {
-        turnTOConfirm();
+        //5btnBox隐藏
+        btnBox2.setVisible(false);
+        //3btnBox显示
+        btnBox1.setVisible(true);
+        btn7.setVisible(false);
+        btn9.setVisible(false);
+        btn8.setVisible(true);
+
         resBox.setVisible(true);
-        btn8.setOnMousePressed(event -> {
-            GameManager.GAME_MANAGER.operation();
-        });
+    }
+
+    @FXML
+    void realOperation(){
+        GameManager.GAME_MANAGER.operation();
     }
 
     @FXML
@@ -91,16 +100,6 @@ public class BattleController implements Controller {
                 new RoundEndReqMsg(NameForAll.mytable_name, NameForAll.player.isMaster(), NameForAll.player.getPlayerInfo()));
         btnBox1.setVisible(false);
         btnBox2.setVisible(false);
-    }
-
-    void turnTOConfirm(){
-        //6btnBox隐藏
-        btnBox2.setVisible(false);
-        //3btnBox显示
-        btnBox1.setVisible(true);
-        btn7.setVisible(false);
-        btn9.setVisible(false);
-        btn8.setVisible(true);
     }
 
     @Override

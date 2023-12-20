@@ -51,6 +51,7 @@ public enum GameManager {
                 loadNode();
                 renderStage();
             });
+            CommunicationService.INSTANCE.sendMessage(new RoundStartReqMsg(NameForAll.mytable_name));
         } else{
             NameForAll.player.setPlayerInfo(msg.getChallengeInfo());
             Platform.runLater(()->{
@@ -59,7 +60,6 @@ public enum GameManager {
                 renderStage();
             });
         }
-        CommunicationService.INSTANCE.sendMessage(new RoundStartReqMsg(NameForAll.mytable_name, NameForAll.player.isMaster()));
     }
 
     //将牌渲染上去
@@ -125,14 +125,17 @@ public enum GameManager {
         Platform.runLater(()->{
             //摸牌询问
             hbox3btn.setVisible(true);
+            buttons[7].setVisible(true);
+            buttons[9].setVisible(true);
             buttons[8].setVisible(false);
         });
     }
 
    //回合正式结束
    public void endMyRound(){
-       //反手就发送回合开始请求
-       CommunicationService.INSTANCE.sendMessage(new RoundStartReqMsg(NameForAll.mytable_name, NameForAll.player.isMaster()));
+       //由master发送回合开始请求
+       if(NameForAll.player.isMaster())
+           CommunicationService.INSTANCE.sendMessage(new RoundStartReqMsg(NameForAll.mytable_name));
    }
 
    //游戏结束

@@ -25,7 +25,6 @@ public class GamingMessage extends Message {
 
     @Override
     public void executeIt() {
-        System.out.println("显示信息");
         GameManager.GAME_MANAGER.showMessage(content, idx);
     }
 }

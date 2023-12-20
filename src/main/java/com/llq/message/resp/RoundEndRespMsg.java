@@ -36,7 +36,6 @@ public class RoundEndRespMsg extends AbstructRespMessage{
             GameManager.GAME_MANAGER.endGame();
         }
         else {
-            System.out.println("回合结束");
             GameManager.GAME_MANAGER.endMyRound();
         }
     }

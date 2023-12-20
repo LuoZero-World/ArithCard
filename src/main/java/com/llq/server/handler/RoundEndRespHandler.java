@@ -34,12 +34,12 @@ public class RoundEndRespHandler extends SimpleChannelInboundHandler<RoundEndReq
         final PlayerInfo masterInfo = cardTable.getMaster().getPlayerInfo(), challengeInfo = cardTable.getChallenge().getPlayerInfo();
         boolean isGameOver = false;
 
-        //表示当前一轮结束
+        //当前一轮结束，判断这一轮结束后游戏是否结束
         if((cardTable.getIdx()&1) == 1){
             isGameOver = cardTable.roundEndBattle();
         }
 
-        //如果结束，通知所有，然后直接结束
+        //如果游戏结束，通知所有，然后直接结束
         if(isGameOver){
             Set<String> MContainsPlayer = new HashSet<>(cardTable.getMembers()){{
                 add(masterInfo.getNickname());
@@ -50,23 +50,25 @@ public class RoundEndRespHandler extends SimpleChannelInboundHandler<RoundEndReq
             //删除对战桌
             CardTableService.INSTANCE.deleteCardTable(cardTable.getTableName());
         } else{
-            //同步信息
-            if(roundEndReqMsg.isMaster()) cardTable.getMaster().setPlayerInfo(playerInfo);
-            else cardTable.getChallenge().setPlayerInfo(playerInfo);
 
-            //通知另外一方开始,这里的if中的逻辑我后来看也懵了,索性不要了
-            //if((cardTable.getIdx()&1) == 0){
-                String name = roundEndReqMsg.isMaster() ? challengeInfo.getNickname() : masterInfo.getNickname();
-                Channel channel = ChannelBaseService.INSTANCE.getChannel(name);
-                channel.writeAndFlush(new RoundStartRespMsg(true, ""));
-            //}
-
-            //这句最好在前面，以防止程序进入死等
             cardTable.turnPlayer();
-            //通知请求结束者
-            ctx.writeAndFlush(new RoundEndRespMsg(false));
-        }
 
+            //同步C-S信息
+            //如果是master发来的回合结束，那么通知guest开始
+            if(roundEndReqMsg.isMaster()){
+                cardTable.getMaster().setPlayerInfo(playerInfo);
+                Channel channel = ChannelBaseService.INSTANCE.getChannel(challengeInfo.getNickname());
+
+                System.out.println("给guest发送回合开始通知");
+                channel.writeAndFlush(new RoundStartRespMsg(true, ""));
+            } else {     //否则是guest发来的回合结束，然后通知master这一轮结束，让其开始下一轮
+                cardTable.getChallenge().setPlayerInfo(playerInfo);
+                Channel channel = ChannelBaseService.INSTANCE.getChannel(masterInfo.getNickname());
+
+                System.out.println("给master发送回合结束通知");
+                channel.writeAndFlush(new RoundEndRespMsg(false));
+            }
+        }
         ReferenceCountUtil.release(roundEndReqMsg);
     }
 }

@@ -20,8 +20,7 @@ public class CardTable {
     private Set<String> members;      //观战成员
     private int maxWatchers;
     private Player master, challenge;   //对战玩家
-    public static final int[] idxArr = new int[]{0, 1, 1, 0};   //当前执行操作的玩家 0-master 1-challenge
-    private int idx = 0;
+    private int idx = 0;    //当前执行操作的玩家 0-master 1-challenge
     List<Card> DigitCard, OperCard;
     int Didx, Opidx;                //牌堆顶指针
     private boolean empty = false, complete = false, fullWatchers = false;

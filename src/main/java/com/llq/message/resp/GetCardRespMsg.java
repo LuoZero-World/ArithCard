@@ -32,7 +32,6 @@ public class GetCardRespMsg extends AbstructRespMessage{
 
     @Override
     public void executeIt() {
-        System.out.println("获取卡牌");
         GameManager.GAME_MANAGER.getCard(this);
     }
 }
