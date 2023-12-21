@@ -78,7 +78,7 @@
          <center>
             <StackPane style="-fx-background-color: #cc5595;" BorderPane.alignment="CENTER">
                <children>
-                  <HBox id="3btnbox" fx:id="btnBox1" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="15.0" visible="false">
+                  <HBox id="3btnbox" fx:id="btnBox1" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="15.0">
                      <children>
                         <Button id="btn7" fx:id="btn7" mnemonicParsing="false" onMousePressed="#MoveDigit" prefHeight="30.0" prefWidth="90.0" text="摸数字牌">
                            <font>
@@ -95,12 +95,17 @@
                               <Font size="14.0" />
                            </font>
                         </Button>
+                        <Button id="btn6" fx:id="btn6" mnemonicParsing="false" onMousePressed="#OnBack" prefHeight="30.0" prefWidth="90.0" text="返回上级">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
                      </children>
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                   </HBox>
-                  <HBox id="5btnbox" fx:id="btnBox2" alignment="CENTER" prefHeight="75.0" prefWidth="590.0" spacing="15.0">
+                  <HBox id="5btnbox" fx:id="btnBox2" alignment="CENTER" prefHeight="75.0" prefWidth="590.0" spacing="15.0" visible="false">
                      <children>
                         <Button id="btn1" fx:id="btn1" mnemonicParsing="false" onMousePressed="#OnOperation" prefHeight="30.0" prefWidth="70.0" text="运算">
                            <font>
@@ -118,11 +123,6 @@
                            </font>
                         </Button>
                         <Button id="btn5" fx:id="btn5" mnemonicParsing="false" onMousePressed="#OnRoundEnd" prefHeight="30.0" prefWidth="70.0" text="结束">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Button>
-                        <Button id="btn6" fx:id="btn6" mnemonicParsing="false" onMousePressed="#OnBack" prefHeight="30.0" prefWidth="90.0" text="返回上级">
                            <font>
                               <Font size="14.0" />
                            </font>

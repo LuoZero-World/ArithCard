@@ -31,6 +31,10 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 
+/*有两种线程会用到GameManager
+ * 1. 执行Msg中execute函数
+ * 2. 执行Controller中事件触发函数
+ */
 @Slf4j
 public enum GameManager {
     GAME_MANAGER;
@@ -131,6 +135,7 @@ public enum GameManager {
             hbox3btn.setVisible(true);
             buttons[7].setVisible(true);
             buttons[9].setVisible(true);
+            buttons[6].setVisible(false);
             buttons[8].setVisible(false);
         });
     }
@@ -144,7 +149,14 @@ public enum GameManager {
 
    //游戏结束
    public void endGame(){
-        clear();
+        //TODO 要等待所有信息接受完毕 才能清除实例
+       try {
+           Thread.sleep(500);
+       } catch (InterruptedException e) {
+           e.printStackTrace();
+       }
+
+       clear();
         Platform.runLater(()->{
             getNodeById("#leavebutton").setVisible(true);
         });
@@ -205,6 +217,10 @@ public enum GameManager {
         playerInfo.getDigitList().add(new Card(resLabel.getText()));
         //渲染桌面
         renderStage();
+        goBackAndClear();
+    }
+
+    public void goBackAndClear(){
         getNodeById("#resbox").setVisible(false);
         hbox3btn.setVisible(false);
         hbox5btn.setVisible(true);

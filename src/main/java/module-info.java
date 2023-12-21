@@ -11,4 +11,5 @@ open module ArithCard31 {
     requires org.slf4j;
     requires rxcontrols;
     requires lombok;
+    requires cn.hutool;
 }

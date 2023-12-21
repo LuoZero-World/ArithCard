@@ -63,7 +63,7 @@ public class BattleController implements Controller {
 
     @FXML
     void OnBack(MouseEvent event) {
-
+        GameManager.GAME_MANAGER.goBackAndClear();
     }
 
     @FXML
@@ -85,6 +85,8 @@ public class BattleController implements Controller {
         btn7.setVisible(false);
         btn9.setVisible(false);
         btn8.setVisible(true);
+        btn8.setDisable(true);
+        btn6.setVisible(true);
 
         resBox.setVisible(true);
     }

@@ -4,6 +4,7 @@ import com.llq.utility.ArithmeticMachine;
 import com.llq.utility.NameForAll;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -25,6 +26,10 @@ public class SelectDCardHandler implements EventHandler<MouseEvent> {
     public void handle(MouseEvent event) {
         Node root = image.getScene().getRoot();
         Label resLabel = (Label)(root.lookup("#reslabel"));
+        //将确认按钮设置为不可用
+        Button button = (Button) root.lookup("#btn8");
+        button.setDisable(true);
+
         //回归原位置
         if(image.getTranslateY() < 0) {
             resLabel.setText("");
@@ -59,8 +64,10 @@ public class SelectDCardHandler implements EventHandler<MouseEvent> {
             }
 
             //计算结果并显示
-            if(NameForAll.couldCompute())
+            if(NameForAll.couldCompute()){
                 resLabel.setText(ArithmeticMachine.tryCompute(NameForAll.operation, NameForAll.first, NameForAll.second));
+            }
+
         }
     }
 }

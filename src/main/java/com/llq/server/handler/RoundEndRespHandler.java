@@ -67,7 +67,11 @@ public class RoundEndRespHandler extends SimpleChannelInboundHandler<RoundEndReq
             //同步C-S信息
             //如果是master发来的回合结束，那么通知guest开始
             if(roundEndReqMsg.isMaster()){
+                challengeChannel.writeAndFlush(
+                        new StateChangeMsg(challengeInfo.getHP(), playerInfo.getHP(), challengeInfo.isDefend(), challengeInfo.isAttack(), playerInfo.isDefend(), playerInfo.isAttack())
+                );
                 challengeChannel.writeAndFlush(new RoundStartRespMsg(true, ""));
+
             } else {     //否则是guest发来的回合结束，然后通知master这一轮结束，让其开始下一轮
                 PlayerInfo newMasterInfo = cardTable.getMaster().getPlayerInfo(), newChallengeInfo = cardTable.getChallenge().getPlayerInfo();
 
