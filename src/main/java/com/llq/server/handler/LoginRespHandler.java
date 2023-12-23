@@ -24,7 +24,6 @@ public class LoginRespHandler extends SimpleChannelInboundHandler<LoginReqMsg> {
             LoginRespMsg loginRespMsg = new LoginRespMsg(true, "");
             ctx.writeAndFlush(loginRespMsg);
         } else{
-            //TODO 完善reason
             LoginRespMsg loginRespMsg = new LoginRespMsg(false, "用户名或密码错误！");
             ctx.writeAndFlush(loginRespMsg);
         }

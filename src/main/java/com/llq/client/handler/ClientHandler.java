@@ -1,4 +1,4 @@
-package com.llq.client;
+package com.llq.client.handler;
 
 import com.llq.message.Message;
 import com.llq.message.MessageService;
@@ -12,11 +12,6 @@ import io.netty.util.ReferenceCountUtil;
  * @Description 消息处理
  */
 public class ClientHandler extends ChannelInboundHandlerAdapter {
-
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        CommunicationService.INSTANCE.registerSession(ctx.channel());
-    }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {

@@ -12,12 +12,14 @@ public enum CardTableService {
 
     @Getter
     private final Map<String, CardTable> tableMap = new ConcurrentHashMap<>();
+    private final Map<String, CardTable> playerTableMap = new ConcurrentHashMap<>();
 
     public CardTable createCardTable(String tableName, String masterName, int maxWatchers){
         if(tableMap.containsKey(tableName)) return CardTable.EMPTY_TABLE;
         Player master = new Player(masterName, true);
         CardTable cardTable = new CardTable(tableName, master, maxWatchers);
         tableMap.put(tableName, cardTable);
+        playerTableMap.put(masterName, cardTable);
 
         return cardTable;
     }
@@ -46,10 +48,18 @@ public enum CardTableService {
             else
                 cardTable.addWatcher(name);
         } else{     //加入对局对战
+            playerTableMap.put(name, cardTable);
             Player challenge = new Player(name, false);
             cardTable.setChallenge(challenge);
         }
         return true;
     }
 
+    public void leaveTable(String username){
+        playerTableMap.remove(username);
+    }
+
+    public CardTable getCardTableBy(String username){
+        return playerTableMap.getOrDefault(username, null);
+    }
 }

@@ -55,7 +55,7 @@ public class Player implements Serializable {
     }
 
     public boolean isDie(){
-        return playerInfo.getHP() <= 0 ? true : false;
+        return playerInfo.getHP() <= 0;
     }
 
 }

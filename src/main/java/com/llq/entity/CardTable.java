@@ -1,13 +1,19 @@
 package com.llq.entity;
 
 import com.llq.message.resp.GamingMessage;
+import com.llq.message.resp.RoundEndRespMsg;
+import com.llq.message.resp.RoundStartRespMsg;
+import com.llq.message.resp.StateChangeMsg;
+import com.llq.server.service.CardTableService;
 import com.llq.server.service.ChannelBaseService;
 import com.llq.utility.PropertiesUtil;
 import io.netty.channel.Channel;
 import lombok.Data;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author 李林麒
@@ -15,6 +21,7 @@ import java.util.*;
  * @Description 游戏对局
  */
 @Data
+@Slf4j
 public class CardTable {
     private String tableName;
     private Set<String> members;      //观战成员
@@ -25,6 +32,7 @@ public class CardTable {
     int Didx, Opidx;                //牌堆顶指针
     private boolean empty = false, complete = false, fullWatchers = false;
 
+    PlayerRobot robot;              //控制断线玩家的行为
     DamageMaker dm;
 
     //空对局
@@ -43,7 +51,7 @@ public class CardTable {
     }
 
     //转换当前正在执行操作的玩家
-    public void turnPlayer(){
+    public synchronized void turnPlayer(){
         idx = (idx+1) % 2;
     }
 
@@ -53,7 +61,7 @@ public class CardTable {
         return tabInfo;
     }
 
-    //当挑战者加入时进行加载
+    //当游戏开始时进行加载
     public void load() {
         DigitCard = new ArrayList<>();
         OperCard = new ArrayList<>();
@@ -98,6 +106,8 @@ public class CardTable {
         Opidx = 8;
         Didx = 12;
 
+        robot = new PlayerRobot("Robot-"+tableName);
+        robot.start();
         complete = true;
     }
 
@@ -228,9 +238,16 @@ public class CardTable {
         List<Channel> channelList = ChannelBaseService.INSTANCE.getChannels(MContainsPlayer);
 
         int msgIIdx = (dm.getRound()+1)*1000+msgIdx;
-        channelList.forEach( c -> c.writeAndFlush(new GamingMessage(msgIIdx, content)));
+        channelList.forEach( c -> {
+            if(c != null) c.writeAndFlush(new GamingMessage(msgIIdx, content));
+        });
     }
 
+    public void interruptRobot(){
+        if(robot != null && robot.isAlive()) robot.interrupt();
+    }
+
+    @SuppressWarnings("ALl")
     class DamageMaker {
 
         int[] fixedDamage;  //固定伤害递增数组
@@ -243,6 +260,72 @@ public class CardTable {
             this.fixedDamage = fixedDamage;
             round = Round;
             idx = 0;
+        }
+    }
+
+    @Data
+    @SuppressWarnings("ALL")
+    public class PlayerRobot extends Thread{
+        boolean masterDisconnect, challengeDisconnect;
+
+        public PlayerRobot(String name) {
+            super(name);
+        }
+
+        @Override
+        public void run() {
+            try {
+                while (!masterDisconnect || !challengeDisconnect) {
+//                    log.debug(masterDisconnect+" "+challengeDisconnect);
+                    PlayerInfo masterInfo = master.getPlayerInfo(), challengeInfo = challenge.getPlayerInfo();
+                    //master掉线，并且当前执行者是master
+                    if (masterDisconnect && idx == 0) {
+                        turnPlayer();
+                        Channel challengeChannel = ChannelBaseService.INSTANCE.getChannel(challenge.getPlayerInfo().getNickname());
+                        if (challengeChannel != null) {
+                            challengeChannel.writeAndFlush(
+                                    new StateChangeMsg(challengeInfo.getHP(), masterInfo.getHP(), challengeInfo.isDefend(), challengeInfo.isAttack(), masterInfo.isDefend(), masterInfo.isAttack())
+                            );
+                            challengeChannel.writeAndFlush(new RoundStartRespMsg(true, ""));
+                        }
+                    }
+                    //challenge掉线 ...
+                    if (challengeDisconnect && idx == 1) {
+                        Channel masterChannel = ChannelBaseService.INSTANCE.getChannel(master.getPlayerInfo().getNickname());
+                        boolean flag = roundEndBattle();
+                        if(flag){
+                            Set<String> MContainsPlayer = new HashSet<>(getMembers());
+                            MContainsPlayer.add(masterInfo.getNickname());
+                            List<Channel> channelList = ChannelBaseService.INSTANCE.getChannels(MContainsPlayer);
+                            channelList.forEach( c -> {
+                                if(c != null) c.writeAndFlush(new RoundEndRespMsg(true));
+                            });
+                            //删除对战桌
+                            interruptRobot();
+                            CardTableService.INSTANCE.deleteCardTable(getTableName());
+                        } else{
+                            turnPlayer();
+                            masterInfo = master.getPlayerInfo();
+                            challengeInfo = challenge.getPlayerInfo();
+                            if(masterChannel != null){
+                                masterChannel.writeAndFlush(
+                                        new StateChangeMsg(masterInfo.getHP(), challengeInfo.getHP(), masterInfo.isDefend(), masterInfo.isAttack(), challengeInfo.isDefend(), challengeInfo.isAttack())
+                                );
+                                masterChannel.writeAndFlush(new RoundEndRespMsg(false));
+                            }
+                        }
+                    }
+                    TimeUnit.SECONDS.sleep(5);
+
+                }
+            } catch (InterruptedException e) {
+                log.info(tableName+" 对局机器人线程终止");
+            }
+        }
+
+        public void setDisconnectedBy(String username) {
+            if(master.getPlayerInfo().getNickname().equals(username)) masterDisconnect = true;
+            else if(challenge.getPlayerInfo().getNickname().equals(username)) challengeDisconnect = true;
         }
     }
 }

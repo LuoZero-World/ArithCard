@@ -15,6 +15,7 @@ public enum ChannelBaseService {
     private final Map<String, Channel> userChannelMap = new ConcurrentHashMap<>();
     private final Map<Channel, String> channelUserMap = new ConcurrentHashMap<>();
 
+
     public void bind(Channel channel, String username){
         userChannelMap.put(username, channel);
         channelUserMap.put(channel, username);

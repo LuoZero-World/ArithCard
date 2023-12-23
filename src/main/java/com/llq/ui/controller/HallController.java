@@ -77,14 +77,13 @@ public class HallController implements Controller{
 
     @FXML
     void OnLogout() {
-//        Platform.exit();
         CommunicationService.INSTANCE.sendMessage(new LogoutReqMsg());
         StageService.INSTANCE.switchStage(UIUrl.Name.LoginView, UIUrl.Name.HallView);
     }
 
     @FXML
     void OnClose(MouseEvent event) {
-        CommunicationService.INSTANCE.closeMyChannel();
+        CommunicationService.INSTANCE.shutDown();
         Platform.exit();
     }
 

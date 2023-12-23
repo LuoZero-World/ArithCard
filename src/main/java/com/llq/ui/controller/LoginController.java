@@ -94,7 +94,7 @@ public class LoginController implements Controller{
 
     @FXML
     void OnClose(MouseEvent event) {
-        CommunicationService.INSTANCE.closeMyChannel();
+        CommunicationService.INSTANCE.shutDown();
         Platform.exit();
     }
 

@@ -1,4 +1,4 @@
-open module ArithCard31 {
+open module ArithCard {
     requires gson;
     requires io.netty.buffer;
     requires io.netty.codec;
@@ -12,4 +12,5 @@ open module ArithCard31 {
     requires rxcontrols;
     requires lombok;
     requires cn.hutool;
+    requires io.netty.handler;
 }

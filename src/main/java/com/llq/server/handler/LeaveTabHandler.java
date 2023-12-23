@@ -20,10 +20,12 @@ public class LeaveTabHandler extends SimpleChannelInboundHandler<LeaveTabReqMsg>
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LeaveTabReqMsg leaveTabReqMsg) throws Exception {
+        CardTable cardtable = CardTableService.INSTANCE.getTableBy(leaveTabReqMsg.getTableName());
         if(leaveTabReqMsg.isMaster()){
+            CardTableService.INSTANCE.leaveTable(cardtable.getMaster().getPlayerInfo().getNickname());
             CardTableService.INSTANCE.deleteCardTable(leaveTabReqMsg.getTableName());
         } else{     //挑战者离开
-            CardTable cardtable = CardTableService.INSTANCE.getTableBy(leaveTabReqMsg.getTableName());
+            CardTableService.INSTANCE.leaveTable(cardtable.getChallenge().getPlayerInfo().getNickname());
             cardtable.setChallenge(null);
             ChannelBaseService.INSTANCE.getChannel(cardtable.getMaster().getPlayerInfo().getNickname())
                     .writeAndFlush(new ChallengeLeaveMsg());

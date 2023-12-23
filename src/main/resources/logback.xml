@@ -21,13 +21,18 @@
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} - [%thread] %-5level %logger{50} -%msg%n</pattern>
         </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
     </appender>
     <!-- 四、总控制开关的代码 -->
     <root level="DEBUG">
         <!-- 输出级别（多少），默认就是DEBUG。TRACE<DEBUG<INFO<WARN<ERROR -->
         <appender-ref ref="STDOUT"/>
         <!-- 输出到控制台，不想输出到控制台可以删掉 -->
-<!--        <appender-ref ref="FILE"/>-->
+        <appender-ref ref="FILE"/>
         <!-- 输出本地磁盘文件夹中，不想输出到文件夹中可以删掉 -->
     </root>
 </configuration>

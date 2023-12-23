@@ -46,6 +46,8 @@ public enum MessageType implements Serializable {
     GamingMsg(20_000, GamingMessage.class),
     StateChangeMsg(20_100, StateChangeMsg.class),
 
+    PingMsg(30_000, PingMsg.class),
+    PongMsg(30_200, PongMsg.class),
     ;
 
     //req _000

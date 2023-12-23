@@ -27,7 +27,9 @@ public class CardClientStartUp extends Application {
     @Override
     public void start(Stage stage) {
         //netty客户端线程启动
-        new Thread(() -> new CardClient().start()).start();
+        Thread nettyThread = new Thread(() -> new CardClient().start());
+
+        nettyThread.start();
         OpenUi(stage);
     }
 

@@ -57,33 +57,40 @@ public class RoundEndRespHandler extends SimpleChannelInboundHandler<RoundEndReq
                 add(challengeInfo.getNickname());
             }};
             List<Channel> channelList = ChannelBaseService.INSTANCE.getChannels(MContainsPlayer);
-            channelList.forEach( c -> c.writeAndFlush(new RoundEndRespMsg(true)));
+            channelList.forEach( c -> {
+                if(c != null) c.writeAndFlush(new RoundEndRespMsg(true));
+            });
             //删除对战桌
+            cardTable.interruptRobot();
             CardTableService.INSTANCE.deleteCardTable(cardTable.getTableName());
         } else{
 
             cardTable.turnPlayer();
 
             //同步C-S信息
-            //如果是master发来的回合结束，那么通知guest开始
+            //如果是master发来的回合结束，那么通知challenge开始
             if(roundEndReqMsg.isMaster()){
-                challengeChannel.writeAndFlush(
-                        new StateChangeMsg(challengeInfo.getHP(), playerInfo.getHP(), challengeInfo.isDefend(), challengeInfo.isAttack(), playerInfo.isDefend(), playerInfo.isAttack())
-                );
-                challengeChannel.writeAndFlush(new RoundStartRespMsg(true, ""));
-
-            } else {     //否则是guest发来的回合结束，然后通知master这一轮结束，让其开始下一轮
+                if(challengeChannel != null) {
+                    challengeChannel.writeAndFlush(
+                            new StateChangeMsg(challengeInfo.getHP(), playerInfo.getHP(), challengeInfo.isDefend(), challengeInfo.isAttack(), playerInfo.isDefend(), playerInfo.isAttack())
+                    );
+                    challengeChannel.writeAndFlush(new RoundStartRespMsg(true, ""));
+                }
+            } else {
+                //否则是guest发来的回合结束，然后通知master这一轮结束，让其开始下一轮
                 PlayerInfo newMasterInfo = cardTable.getMaster().getPlayerInfo(), newChallengeInfo = cardTable.getChallenge().getPlayerInfo();
 
                 //调整对战双方战斗消息
-                masterChannel.writeAndFlush(
-                        new StateChangeMsg(newMasterInfo.getHP(), newChallengeInfo.getHP(), newMasterInfo.isDefend(), newMasterInfo.isAttack(), newChallengeInfo.isDefend(), newChallengeInfo.isAttack())
-                );
-                challengeChannel.writeAndFlush(
-                        new StateChangeMsg(newChallengeInfo.getHP(), newMasterInfo.getHP(), newChallengeInfo.isDefend(), newChallengeInfo.isAttack(), newMasterInfo.isDefend(), newMasterInfo.isAttack())
-                );
-
-                masterChannel.writeAndFlush(new RoundEndRespMsg(false));
+                if(masterChannel != null)
+                    masterChannel.writeAndFlush(
+                            new StateChangeMsg(newMasterInfo.getHP(), newChallengeInfo.getHP(), newMasterInfo.isDefend(), newMasterInfo.isAttack(), newChallengeInfo.isDefend(), newChallengeInfo.isAttack())
+                    );
+                if(challengeChannel != null)
+                    challengeChannel.writeAndFlush(
+                            new StateChangeMsg(newChallengeInfo.getHP(), newMasterInfo.getHP(), newChallengeInfo.isDefend(), newChallengeInfo.isAttack(), newMasterInfo.isDefend(), newMasterInfo.isAttack())
+                    );
+                if(masterChannel != null)
+                    masterChannel.writeAndFlush(new RoundEndRespMsg(false));
             }
         }
         ReferenceCountUtil.release(roundEndReqMsg);

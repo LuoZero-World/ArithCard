@@ -20,6 +20,7 @@ import java.net.InetSocketAddress;
  * @Description 卡牌游戏服务端
  */
 public class CardServer {
+
     public void start(){
         try {
             connect();
@@ -44,6 +45,7 @@ public class CardServer {
         RoundStartRespMsgHandler ROUND_START_HANDLER = new RoundStartRespMsgHandler();
         RoundEndRespHandler ROUND_END_HANDLER = new RoundEndRespHandler();
         GetCardRespHandler CARD_GET_HANDLER = new GetCardRespHandler();
+        PingHandler PING_HANDLER = new PingHandler();
 
         try {
             ServerBootstrap b = new ServerBootstrap();
@@ -57,6 +59,7 @@ public class CardServer {
                             socketChannel.pipeline().addLast(DECODER);
                             socketChannel.pipeline().addLast(ENCODER);
                             socketChannel.pipeline().addLast(LOGIN);
+                            socketChannel.pipeline().addLast(PING_HANDLER);
                             socketChannel.pipeline().addLast(TABLE_HANDLER);
                             socketChannel.pipeline().addLast(TABLE_CREATE_HANDLER);
                             socketChannel.pipeline().addLast(TABLE_LEAVE_HANDLER);
