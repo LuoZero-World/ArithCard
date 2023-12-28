@@ -38,7 +38,7 @@ public class JoinTabRespHandler extends SimpleChannelInboundHandler<JoinTabReqMs
             ctx.writeAndFlush(message);
             masChannel.writeAndFlush(message);
         } else{
-            ctx.writeAndFlush(new JoinTabRespMsg(false, "原因有很多"));
+            ctx.writeAndFlush(new JoinTabRespMsg(false, "对局加入失败，原因很多"));
         }
         ReferenceCountUtil.release(joinTabReqMsg);
     }

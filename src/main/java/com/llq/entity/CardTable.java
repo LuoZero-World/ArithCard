@@ -210,7 +210,7 @@ public class CardTable {
         if (!p.defendIt()) {
             sendGamingMessage(playerInfo.getNickname()+"未进行防御", msgIdx++);
             p.damage(d);
-            sendGamingMessage(playerInfo.getNickname()+"受到" + d + "点伤害," + "当前血量剩余" + Math.max(0, playerInfo.getHP()), msgIdx++);
+            sendGamingMessage(playerInfo.getNickname()+"受到" + d + "点伤害," + "当前血量剩余" + playerInfo.getHP(), msgIdx++);
        } else sendGamingMessage("伤害抵挡成功", msgIdx++);
     }
 
@@ -294,11 +294,21 @@ public class CardTable {
                         Channel masterChannel = ChannelBaseService.INSTANCE.getChannel(master.getPlayerInfo().getNickname());
                         boolean flag = roundEndBattle();
                         if(flag){
+                            PlayerInfo finalMasterInfo = master.getPlayerInfo();
+                            PlayerInfo finalChallengeInfo = challenge.getPlayerInfo();
+
                             Set<String> MContainsPlayer = new HashSet<>(getMembers());
-                            MContainsPlayer.add(masterInfo.getNickname());
                             List<Channel> channelList = ChannelBaseService.INSTANCE.getChannels(MContainsPlayer);
-                            channelList.forEach( c -> {
-                                if(c != null) c.writeAndFlush(new RoundEndRespMsg(true));
+                            channelList.add(masterChannel);
+                            channelList.forEach(c -> {
+                                if(c != null){
+                                    //先发送状态信息
+                                    c.writeAndFlush(
+                                            new StateChangeMsg(finalMasterInfo.getHP(), finalChallengeInfo.getHP(), finalMasterInfo.isDefend(), finalMasterInfo.isAttack(), finalChallengeInfo.isDefend(), finalChallengeInfo.isAttack())
+                                    );
+                                    //再发送结束信息
+                                    c.writeAndFlush(new RoundEndRespMsg(true));
+                                }
                             });
                             //删除对战桌
                             interruptRobot();

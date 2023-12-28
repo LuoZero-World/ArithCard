@@ -52,6 +52,8 @@ public class RoundEndRespHandler extends SimpleChannelInboundHandler<RoundEndReq
 
         //如果游戏结束，通知所有，然后直接结束
         if(isGameOver){
+            callEveryBody(cardTable, masterChannel, challengeChannel);
+
             Set<String> MContainsPlayer = new HashSet<>(cardTable.getMembers()){{
                 add(masterInfo.getNickname());
                 add(challengeInfo.getNickname());
@@ -64,10 +66,7 @@ public class RoundEndRespHandler extends SimpleChannelInboundHandler<RoundEndReq
             cardTable.interruptRobot();
             CardTableService.INSTANCE.deleteCardTable(cardTable.getTableName());
         } else{
-
             cardTable.turnPlayer();
-
-            //同步C-S信息
             //如果是master发来的回合结束，那么通知challenge开始
             if(roundEndReqMsg.isMaster()){
                 if(challengeChannel != null) {
@@ -77,22 +76,26 @@ public class RoundEndRespHandler extends SimpleChannelInboundHandler<RoundEndReq
                     challengeChannel.writeAndFlush(new RoundStartRespMsg(true, ""));
                 }
             } else {
-                //否则是guest发来的回合结束，然后通知master这一轮结束，让其开始下一轮
-                PlayerInfo newMasterInfo = cardTable.getMaster().getPlayerInfo(), newChallengeInfo = cardTable.getChallenge().getPlayerInfo();
-
-                //调整对战双方战斗消息
-                if(masterChannel != null)
-                    masterChannel.writeAndFlush(
-                            new StateChangeMsg(newMasterInfo.getHP(), newChallengeInfo.getHP(), newMasterInfo.isDefend(), newMasterInfo.isAttack(), newChallengeInfo.isDefend(), newChallengeInfo.isAttack())
-                    );
-                if(challengeChannel != null)
-                    challengeChannel.writeAndFlush(
-                            new StateChangeMsg(newChallengeInfo.getHP(), newMasterInfo.getHP(), newChallengeInfo.isDefend(), newChallengeInfo.isAttack(), newMasterInfo.isDefend(), newMasterInfo.isAttack())
-                    );
+                //否则是challenge发来的回合结束，通知master这一轮结束，让其开始下一轮
+                callEveryBody(cardTable, masterChannel, challengeChannel);
                 if(masterChannel != null)
                     masterChannel.writeAndFlush(new RoundEndRespMsg(false));
             }
         }
         ReferenceCountUtil.release(roundEndReqMsg);
+    }
+
+    //调整对战双方战斗消息
+    private void callEveryBody(CardTable cardTable, Channel masterChannel, Channel challengeChannel){
+        PlayerInfo newMasterInfo = cardTable.getMaster().getPlayerInfo(), newChallengeInfo = cardTable.getChallenge().getPlayerInfo();
+
+        if(masterChannel != null)
+            masterChannel.writeAndFlush(
+                    new StateChangeMsg(newMasterInfo.getHP(), newChallengeInfo.getHP(), newMasterInfo.isDefend(), newMasterInfo.isAttack(), newChallengeInfo.isDefend(), newChallengeInfo.isAttack())
+            );
+        if(challengeChannel != null)
+            challengeChannel.writeAndFlush(
+                    new StateChangeMsg(newChallengeInfo.getHP(), newMasterInfo.getHP(), newChallengeInfo.isDefend(), newChallengeInfo.isAttack(), newMasterInfo.isDefend(), newMasterInfo.isAttack())
+            );
     }
 }

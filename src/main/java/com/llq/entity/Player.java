@@ -35,7 +35,7 @@ public class Player implements Serializable {
 
     public void damage(int d) {
         int tHP = playerInfo.getHP();
-        playerInfo.setHP(tHP-d);
+        playerInfo.setHP(Math.max(tHP-d, 0));
     }
 
     //返回值代表是否防御成功
