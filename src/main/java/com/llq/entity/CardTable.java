@@ -71,14 +71,17 @@ public class CardTable {
         for (int i = 0; i < 78; i++) {
             DigitCard.add(new Card(Card.CardType.DigitCard, String.valueOf(i % 13 + 1)));
         }
-        //加入+ - 运算牌*6
-        for (int i = 0; i < 6; i++) {
+        //加入+ * 运算牌*8
+        for (int i = 0; i < 8; i++) {
             OperCard.add(new Card(Card.CardType.OperationCard, "+"));
+            OperCard.add(new Card(Card.CardType.OperationCard, "*"));
+        }
+        //加入 - 运算牌*4
+        for(int i = 0; i < 4; i++){
             OperCard.add(new Card(Card.CardType.OperationCard, "-"));
         }
-        //加入* / % 运算牌*4
-        for (int i = 0; i < 4; i++) {
-            OperCard.add(new Card(Card.CardType.OperationCard, "*"));
+        //加入/ % 运算牌*2
+        for (int i = 0; i < 2; i++) {
             OperCard.add(new Card(Card.CardType.OperationCard, "/"));
             OperCard.add(new Card(Card.CardType.OperationCard, "%"));
         }
