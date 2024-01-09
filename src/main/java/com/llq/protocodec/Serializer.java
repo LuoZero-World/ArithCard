@@ -1,6 +1,7 @@
 package com.llq.protocodec;
 
 import com.google.gson.*;
+import lombok.NonNull;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -17,7 +18,7 @@ public interface Serializer {
     enum Algorithm implements Serializer {
         Java {
             @Override
-            public <T> T deserializer(Class<T> clazz, byte[] bytes) {
+            public <T> T deserializer(@NonNull Class<T> clazz, byte[] bytes) {
                 try {
                     ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
                     return (T) ois.readObject();
@@ -41,7 +42,7 @@ public interface Serializer {
 
         Json {
             @Override
-            public <T> T deserializer(Class<T> clazz, byte[] bytes) {
+            public <T> T deserializer(@NonNull Class<T> clazz, byte[] bytes) {
                 Gson gson = new GsonBuilder().registerTypeAdapter(Class.class, new GsonCodec()).create();
                 String json = new String(bytes, StandardCharsets.UTF_8);
                 return gson.fromJson(json, clazz);
@@ -53,8 +54,7 @@ public interface Serializer {
                 String json = gson.toJson(obj);
                 return json.getBytes(StandardCharsets.UTF_8);
             }
-        };
-
+        },
     }
 }
 

@@ -19,11 +19,13 @@ import java.util.List;
 @ChannelHandler.Sharable
 public class MessageEncoder extends MessageToMessageEncoder<Message> {
 
+    private static final int MAGIC_NUMBER =  0x01020304;
+
     @Override
     protected void encode(ChannelHandlerContext ctx, Message message, List<Object> list) throws Exception {
         ByteBuf buffer = ctx.alloc().buffer();
         //魔数-4B
-        buffer.writeInt(0x01020304);
+        buffer.writeInt(MAGIC_NUMBER);
         //消息类型-4B
         buffer.writeInt(message.getMessageType().getType());
 

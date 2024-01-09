@@ -11,6 +11,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
 
 import java.net.InetSocketAddress;
 
@@ -56,10 +58,11 @@ public class CardServer {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) {
                             socketChannel.pipeline().addLast(new LengthFieldBasedFrameDecoder(2048, 8, 2,2,0));
+                            socketChannel.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
                             socketChannel.pipeline().addLast(DECODER);
                             socketChannel.pipeline().addLast(ENCODER);
                             socketChannel.pipeline().addLast(LOGIN);
-                            socketChannel.pipeline().addLast(PING_HANDLER);
+//                            socketChannel.pipeline().addLast(PING_HANDLER);
                             socketChannel.pipeline().addLast(TABLE_HANDLER);
                             socketChannel.pipeline().addLast(TABLE_CREATE_HANDLER);
                             socketChannel.pipeline().addLast(TABLE_LEAVE_HANDLER);

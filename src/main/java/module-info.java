@@ -13,4 +13,5 @@ open module ArithCard {
     requires lombok;
     requires cn.hutool;
     requires io.netty.handler;
+    requires java.sql;
 }

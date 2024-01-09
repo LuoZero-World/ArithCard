@@ -14,7 +14,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import io.netty.handler.timeout.IdleStateHandler;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
@@ -46,11 +47,12 @@ public class CardClient {
                     .handler(new ChannelInitializer<SocketChannel>() {  //通道初始化配置
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast(new IdleStateHandler(0, 0, 8));
+//                            socketChannel.pipeline().addLast(new IdleStateHandler(0, 0, 8));
                             socketChannel.pipeline().addLast(new LengthFieldBasedFrameDecoder(2048, 8, 2,2,0));
+                            socketChannel.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
                             socketChannel.pipeline().addLast(DECODER);
                             socketChannel.pipeline().addLast(ENCODER);
-                            socketChannel.pipeline().addLast(PING_HANDLER);
+//                            socketChannel.pipeline().addLast(PING_HANDLER);
                             socketChannel.pipeline().addLast(new ClientHandler());
                         }
                     });

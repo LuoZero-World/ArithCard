@@ -35,7 +35,7 @@ public enum MessageType implements Serializable {
     GameStartReqMsg(5_000, GameStartReqMsg.class),
     GameStartRespMsg(5_200, GameStartRespMsg.class),
 
-    RoundStartReqMsg(5_010, RoundStartRespMsg.class),
+    RoundStartReqMsg(5_010, RoundStartReqMsg.class),
     RoundStartRespMsg(5_210, RoundStartRespMsg.class),
 
     RoundEndReqMsg(6_000, RoundEndReqMsg.class),
