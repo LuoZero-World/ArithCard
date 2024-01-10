@@ -23,11 +23,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 
@@ -45,9 +42,6 @@ public enum GameManager {
     private Label fLabel = null, sLabel = null, opLabel = null, resLabel = null;
     private HBox hbox3btn = null, hbox5btn = null;
     private VBox infoBox = null;
-
-    //TODO 有序
-    Deque<Pair<Integer, String>> msgQueue = new ArrayDeque<>();
 
     //游戏开始，显示手牌，发送回合开始请求
     public void startGame(GameStartRespMsg msg){
@@ -102,9 +96,22 @@ public enum GameManager {
     }
 
     //左面栏目显示游戏信息
-    public void showMessage(String content, int idx){
+    public void showMessage(List<String> content){
         Platform.runLater(()->{
             if(infoBox.getChildren().size() > 30) {
+                infoBox.getChildren().clear();
+            }
+            content.forEach(msg ->{
+                Label infoLabel = new Label(msg);
+                infoLabel.setStyle("-fx-font-size: 12;");
+                infoBox.getChildren().add(infoLabel);
+            });
+        });
+    }
+
+    public void showMessage(String content){
+        Platform.runLater(()->{
+            if(infoBox.getChildren().size() > 20) {
                 infoBox.getChildren().clear();
             }
             Label infoLabel = new Label(content);
@@ -235,11 +242,11 @@ public enum GameManager {
         PlayerInfo playerInfo = NameForAll.player.getPlayerInfo();
         //已经充好能了
         if(flag && playerInfo.isDefend()){
-            showMessage("盾牌已经充能完毕,无需重复", 10_001);
+            showMessage("盾牌已经充能完毕,无需重复");
             return;
         }
         if(!flag && playerInfo.isAttack()){
-            showMessage("剑已经充能完毕,无需重复", 10_002);
+            showMessage("剑已经充能完毕,无需重复");
             return;
         }
 
@@ -257,7 +264,7 @@ public enum GameManager {
 
         //没有找到 24 点
         if(!f){
-            showMessage("没数字牌 24", 10_003);
+            showMessage("没数字牌 24");
             return;
         }
 

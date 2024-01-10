@@ -177,72 +177,80 @@ public class CardTable {
     }
 
     public boolean roundEndBattle(){
-        int msgIdx = 1;
-        sendGamingMessage("\n===该轮结束 系统执行判定===", msgIdx++);
+        List<String> messages = new ArrayList<>();
+        messages.add("===该轮结束 系统执行判定===");
         dm.round--;
         //固定伤害
         if (dm.round == 0) {
             dm.round = DamageMaker.Round;
-            sendGamingMessage("对玩家进行固定伤害！", msgIdx++);
-            doDamage(dm.fixedDamage[dm.idx], master, msgIdx);
-            doDamage(dm.fixedDamage[dm.idx], challenge, msgIdx);
+            messages.add("对玩家进行固定伤害！");
+            doDamage(dm.fixedDamage[dm.idx], master, messages);
+            doDamage(dm.fixedDamage[dm.idx], challenge, messages);
             dm.idx = (dm.idx+1) % dm.fixedDamage.length;
-            if (isPlayerDie(msgIdx)) return true;
+            if (isPlayerDie(messages)) {
+                sendGamingMessage(messages);
+                return true;
+            }
         }
 
         //玩家互殴
         if (master.attackIt()) {
-            sendGamingMessage( master.getPlayerInfo().getNickname() + "发起攻击", msgIdx++);
-            doDamage(1, challenge, msgIdx);
+            messages.add(master.getPlayerInfo().getNickname() + "发起攻击");
+            doDamage(1, challenge, messages);
         }
         if (challenge.attackIt()) {
-            sendGamingMessage(challenge.getPlayerInfo().getNickname() + "发起攻击", msgIdx++);
-            doDamage(1, master, msgIdx++);
+            messages.add(challenge.getPlayerInfo().getNickname() + "发起攻击");
+            doDamage(1, master, messages);
         }
 
-        if (isPlayerDie(msgIdx)) return true;
+        if (isPlayerDie(messages)) {
+            sendGamingMessage(messages);
+            return true;
+        }
 
-        sendGamingMessage("无玩家阵亡", msgIdx++);
-        sendGamingMessage("距离下一周固定攻击还有" + dm.round + "回合", msgIdx++);
+        messages.addAll(List.of("无玩家阵亡", "距离下一周固定攻击还有" + dm.round + "回合"));
+        sendGamingMessage(messages);
         return false;
     }
     //对玩家p 进行伤害为d的攻击
-    void doDamage(int d, Player p, int msgIdx) {
+    void doDamage(int d, Player p, List<String> messages) {
         PlayerInfo playerInfo = p.getPlayerInfo();
-        sendGamingMessage(playerInfo.getNickname() + ":", msgIdx++);
+        messages.add(playerInfo.getNickname() + ":");
         if (!p.defendIt()) {
-            sendGamingMessage(playerInfo.getNickname()+"未进行防御", msgIdx++);
+            messages.add(playerInfo.getNickname()+"未进行防御");
             p.damage(d);
-            sendGamingMessage(playerInfo.getNickname()+"受到" + d + "点伤害," + "当前血量剩余" + playerInfo.getHP(), msgIdx++);
-       } else sendGamingMessage("伤害抵挡成功", msgIdx++);
+            messages.add(playerInfo.getNickname()+"受到" + d + "点伤害," + "当前血量剩余" + playerInfo.getHP());
+       } else {
+            messages.add("伤害抵挡成功");
+        }
     }
 
     //检测是否有玩家死亡
-    boolean isPlayerDie(int msgIdx) {
+    boolean isPlayerDie(List<String> messages) {
         PlayerInfo masterInfo = master.getPlayerInfo(), challengeInfo = challenge.getPlayerInfo();
         if (master.isDie() && challenge.isDie()) {
-            sendGamingMessage("\n" + masterInfo.getNickname() + "和" + challengeInfo.getNickname() + "都已阵亡，平局！", msgIdx++);
+            messages.add(masterInfo.getNickname() + "和" + challengeInfo.getNickname() + "都已阵亡，平局！");
             return true;
         } else if (challenge.isDie()) {
-            sendGamingMessage("\n" + challengeInfo.getNickname() + "阵亡" + masterInfo.getNickname() + "取得胜利！", msgIdx++);
+            messages.add(challengeInfo.getNickname() + "阵亡" + masterInfo.getNickname() + "取得胜利！");
             return true;
         } else if (master.isDie()) {
-            sendGamingMessage("\n" + masterInfo.getNickname() + "阵亡" + challengeInfo.getNickname() + "取得胜利！", msgIdx++);
+            messages.add( masterInfo.getNickname() + "阵亡" + challengeInfo.getNickname() + "取得胜利！");
             return true;
         }
         return false;
     }
 
-    public void sendGamingMessage(String content, int msgIdx){
+    public void sendGamingMessage(List<String> content){
         Set<String> MContainsPlayer = new HashSet<>(members){{
             add(master.getPlayerInfo().getNickname());
             add(challenge.getPlayerInfo().getNickname());
         }};
         List<Channel> channelList = ChannelBaseService.INSTANCE.getChannels(MContainsPlayer);
 
-        int msgIIdx = (dm.getRound()+1)*1000+msgIdx;
+        GamingMessage gamingMessage = new GamingMessage(content);
         channelList.forEach( c -> {
-            if(c != null) c.writeAndFlush(new GamingMessage(msgIIdx, content));
+            if(c != null) c.writeAndFlush(gamingMessage);
         });
     }
 
@@ -329,7 +337,6 @@ public class CardTable {
                         }
                     }
                     TimeUnit.SECONDS.sleep(5);
-
                 }
             } catch (InterruptedException e) {
                 log.info(tableName+" 对局机器人线程终止");

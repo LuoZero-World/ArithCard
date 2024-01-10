@@ -6,6 +6,8 @@ import com.llq.message.manager.GameManager;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author 李林麒
  * @date 2022/11/26 20:50
@@ -15,8 +17,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class GamingMessage extends Message {
 
-    int idx;
-    String content;
+    List<String> content;
 
     @Override
     public MessageType getMessageType() {
@@ -25,6 +26,6 @@ public class GamingMessage extends Message {
 
     @Override
     public void executeIt() {
-        GameManager.GAME_MANAGER.showMessage(content, idx);
+        GameManager.GAME_MANAGER.showMessage(content);
     }
 }
