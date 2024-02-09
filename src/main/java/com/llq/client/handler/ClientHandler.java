@@ -16,11 +16,15 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         Message message = (Message) msg;
-
         //新起一个线程去执行操作
         new Thread(()->{
             MessageService.INSTANCE.execMessage(message);
             ReferenceCountUtil.release(msg);
         }).start();
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        System.err.println(cause.getMessage());
     }
 }

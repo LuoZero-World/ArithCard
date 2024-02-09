@@ -29,7 +29,8 @@ public class LogoutHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         String username = ChannelBaseService.INSTANCE.getUser(ctx.channel());
-        CardTableService.INSTANCE.getCardTableBy(username).getRobot().setDisconnectedBy(username);
+        if(CardTableService.INSTANCE.getCardTableBy(username) != null)
+            CardTableService.INSTANCE.getCardTableBy(username).getRobot().setDisconnectedBy(username);
         UserService.INSTANCE.logout(username);
         log.error("{} 异常断开，异常原因 {}", ctx.channel(), cause.getMessage());
         ReferenceCountUtil.release(cause);

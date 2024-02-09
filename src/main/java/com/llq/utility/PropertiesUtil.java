@@ -14,17 +14,10 @@ import java.util.Properties;
  */
 public class PropertiesUtil {
 
-    static String folderRoot = "src/main/resources/config";
-
     public static Properties confProperties = new Properties();
     //将所有properties文件读入内存
     static {
-        List<String> fileNames = getAllFile(folderRoot, true).stream()
-                .map(str -> {
-                    int idx = str.indexOf("\\config");
-                    return str.substring(idx, str.length()).replaceAll("\\\\", "/");
-                }).toList();
-
+        List<String> fileNames = List.of("/config/gameArgs.properties", "/config/systemConfig.properties");
         for(String fileName : fileNames){
 
             try (InputStream in = PropertiesUtil.class.getResourceAsStream(fileName)) {
