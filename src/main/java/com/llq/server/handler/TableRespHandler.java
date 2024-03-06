@@ -31,16 +31,16 @@ public class TableRespHandler extends SimpleChannelInboundHandler<TableReqMsg> {
         TableRespMsg msg = null;
         if(tableReqMsg.isQuery()){      //模糊查询
             String tabName = tableReqMsg.getTableName();
-            List<TabInfo> tabInfos2 = tabInfos.stream().filter(tabInfo -> {
-                if (tabInfo.getTableName().contains(tabName)) return true;
-                return false;
-            }).toList();
+//            List<TabInfo> tabInfos2 = tabInfos.stream().filter(tabInfo -> {
+//                if (tabInfo.getTableName().contains(tabName)) return true;
+//                return false;
+//            }).toList();
 
-            if(tabInfos2.size() == 0)
-                msg = new TableRespMsg(false, "当前暂无对局", 2);
-            else msg = new TableRespMsg(true, "", 2);
-
-            msg.setTabInfos(tabInfos2);
+//            if(tabInfos2.size() == 0)
+//                msg = new TableRespMsg(false, "当前暂无对局", 2);
+//            else msg = new TableRespMsg(true, "", 2);
+//
+//            msg.setTabInfos(tabInfos2);
         } else{     //所有对战桌
             if(tabInfos.size() == 0)
                 msg = new TableRespMsg(false, "当前暂无对局", 1);

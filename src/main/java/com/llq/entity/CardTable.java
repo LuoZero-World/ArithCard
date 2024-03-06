@@ -182,7 +182,7 @@ public class CardTable {
         dm.round--;
         //固定伤害
         if (dm.round == 0) {
-            dm.round = DamageMaker.Round;
+            dm.round = PropertiesUtil.getInt("damageRound");
             messages.add("对玩家进行固定伤害！");
             doDamage(dm.fixedDamage[dm.idx], master, messages);
             doDamage(dm.fixedDamage[dm.idx], challenge, messages);
@@ -208,7 +208,11 @@ public class CardTable {
             return true;
         }
 
-        messages.addAll(List.of("无玩家阵亡", "距离下一周固定攻击还有" + dm.round + "回合"));
+        ArrayList<String> list1 = new ArrayList<String>(){{
+            add("无玩家阵亡");
+            add("距离下一周固定攻击还有" + dm.round + "回合");
+        }};
+        messages.addAll(list1);
         sendGamingMessage(messages);
         return false;
     }
@@ -242,7 +246,7 @@ public class CardTable {
     }
 
     public void sendGamingMessage(List<String> content){
-        Set<String> MContainsPlayer = new HashSet<>(members){{
+        Set<String> MContainsPlayer = new HashSet<String>(members){{
             add(master.getPlayerInfo().getNickname());
             add(challenge.getPlayerInfo().getNickname());
         }};
@@ -265,7 +269,7 @@ public class CardTable {
         @Getter
         public int idx, round;     //下一次攻击剩余轮数
 
-        static int Round = PropertiesUtil.getInt("damageRound");       //固定伤害间隔轮数
+        int Round = PropertiesUtil.getInt("damageRound");       //固定伤害间隔轮数
 
         public DamageMaker(int[] fixedDamage) {
             this.fixedDamage = fixedDamage;

@@ -21,13 +21,13 @@ public class PingSendHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
         // IdleStateHandler 所产生的 IdleStateEvent 的处理逻辑.
-        if (evt instanceof IdleStateEvent e) {
+        if (evt instanceof IdleStateEvent) {
+            IdleStateEvent e = (IdleStateEvent) evt;
             switch (e.state()) {
-                case READER_IDLE -> handleReaderIdle(ctx);
-                case WRITER_IDLE -> handleWriterIdle(ctx);
-                case ALL_IDLE -> handleAllIdle(ctx);
-                default -> {
-                }
+                case READER_IDLE: handleReaderIdle(ctx); break;
+                case WRITER_IDLE: handleWriterIdle(ctx); break;
+                case ALL_IDLE: handleAllIdle(ctx); break;
+                default: break;
             }
         }
     }

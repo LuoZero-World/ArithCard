@@ -317,42 +317,42 @@ public enum GameManager {
 
     String getUrlBy(Card card){
         String content = card.getContent();
-        return switch (content) {
-            case "1" -> ImgUrl.One;
-            case "2" -> ImgUrl.Two;
-            case "3" -> ImgUrl.Three;
-            case "4" -> ImgUrl.Four;
-            case "5" -> ImgUrl.Five;
-            case "6" -> ImgUrl.Six;
-            case "7" -> ImgUrl.Seven;
-            case "8" -> ImgUrl.Eight;
-            case "9" -> ImgUrl.Nine;
-            case "10" -> ImgUrl.Ten;
-            case "11" -> ImgUrl.Eleven;
-            case "12" -> ImgUrl.Twelve;
-            case "13" -> ImgUrl.Thirteen;
-            case "14" -> ImgUrl.Fourteen;
-            case "15" -> ImgUrl.Fifteen;
-            case "16" -> ImgUrl.Sixteen;
-            case "17" -> ImgUrl.Seventeen;
-            case "18" -> ImgUrl.Eighteen;
-            case "19" -> ImgUrl.Nineteen;
-            case "20" -> ImgUrl.Twenty;
-            case "21" -> ImgUrl.TwentyOne;
-            case "22" -> ImgUrl.TwentyTwo;
-            case "23" -> ImgUrl.TwentyThree;
-            case "24" -> ImgUrl.TwentyFour;
-            case "+" -> ImgUrl.Addition;
-            case "-" -> ImgUrl.Subtraction;
-            case "*" -> ImgUrl.Multiplication;
-            case "/" -> ImgUrl.Division;
-            case "%" -> ImgUrl.Redundant;
-            case "&" -> ImgUrl.And;
-            case "|" -> ImgUrl.Or;
-            case "^" -> ImgUrl.Xor;
-            case "<<" -> ImgUrl.Shift_left;
-            case ">>" -> ImgUrl.Shift_right;
-            default -> null;
-        };
+        switch (content) {
+            case "1": return ImgUrl.One;
+            case "2": return ImgUrl.Two;
+            case "3": return ImgUrl.Three;
+            case "4": return ImgUrl.Four;
+            case "5": return ImgUrl.Five;
+            case "6": return ImgUrl.Six;
+            case "7": return ImgUrl.Seven;
+            case "8": return ImgUrl.Eight;
+            case "9": return ImgUrl.Nine;
+            case "10": return ImgUrl.Ten;
+            case "11": return ImgUrl.Eleven;
+            case "12": return ImgUrl.Twelve;
+            case "13": return ImgUrl.Thirteen;
+            case "14": return ImgUrl.Fourteen;
+            case "15": return ImgUrl.Fifteen;
+            case "16": return ImgUrl.Sixteen;
+            case "17": return ImgUrl.Seventeen;
+            case "18": return ImgUrl.Eighteen;
+            case "19": return ImgUrl.Nineteen;
+            case "20": return ImgUrl.Twenty;
+            case "21": return ImgUrl.TwentyOne;
+            case "22": return ImgUrl.TwentyTwo;
+            case "23": return ImgUrl.TwentyThree;
+            case "24": return ImgUrl.TwentyFour;
+            case "+": return ImgUrl.Addition;
+            case "-": return ImgUrl.Subtraction;
+            case "*": return ImgUrl.Multiplication;
+            case "/": return ImgUrl.Division;
+            case "%": return ImgUrl.Redundant;
+            case "&": return ImgUrl.And;
+            case "|": return ImgUrl.Or;
+            case "^": return ImgUrl.Xor;
+            case "<<": return ImgUrl.Shift_left;
+            case ">>": return ImgUrl.Shift_right;
+            default: return null;
+        }
     }
 }

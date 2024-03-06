@@ -17,7 +17,12 @@ public class PropertiesUtil {
     public static Properties confProperties = new Properties();
     //将所有properties文件读入内存
     static {
-        List<String> fileNames = List.of("/config/gameArgs.properties", "/config/systemConfig.properties");
+        ArrayList<String> fileNames = new ArrayList<String>(){
+            {
+                add("/config/gameArgs.properties");
+                add("/config/systemConfig.properties");
+            }
+        };
         for(String fileName : fileNames){
 
             try (InputStream in = PropertiesUtil.class.getResourceAsStream(fileName)) {

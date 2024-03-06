@@ -54,7 +54,7 @@ public class RoundEndRespHandler extends SimpleChannelInboundHandler<RoundEndReq
         if(isGameOver){
             callEveryBody(cardTable, masterChannel, challengeChannel);
 
-            Set<String> MContainsPlayer = new HashSet<>(cardTable.getMembers()){{
+            Set<String> MContainsPlayer = new HashSet<String>(cardTable.getMembers()){{
                 add(masterInfo.getNickname());
                 add(challengeInfo.getNickname());
             }};

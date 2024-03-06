@@ -17,7 +17,7 @@ import java.util.function.BiFunction;
  * @Description 计算器
  */
 public class ArithmeticMachine {
-    static Map<String, BiFunction<Integer, Integer, String>> hmap = new HashMap<>(){{
+    static Map<String, BiFunction<Integer, Integer, String>> hmap = new HashMap<String, BiFunction<Integer, Integer, String>>(){{
         put("+", (a, b) -> String.valueOf(a + b));
         put("-", (a, b) -> String.valueOf(a - b));
         put("*", (a, b) -> String.valueOf(a * b));

@@ -61,18 +61,8 @@ public class HallController implements Controller{
     }
 
     private void initListView() {
-        tableList.setCellFactory(new Callback<>() {
-            @Override
-            public ListCell<TabInfo> call(ListView<TabInfo> tabInfoListView) {
-                return new TabInfoCell();
-            }
-        });
-        tableList2.setCellFactory(new Callback<>() {
-            @Override
-            public ListCell<TabInfo> call(ListView<TabInfo> tabInfoListView) {
-                return new TabInfoCell();
-            }
-        });
+        tableList.setCellFactory((Callback) param -> new TabInfoCell());
+        tableList2.setCellFactory((Callback) param -> new TabInfoCell());
     }
 
     @FXML
